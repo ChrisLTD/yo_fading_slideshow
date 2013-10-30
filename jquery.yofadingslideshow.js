@@ -165,7 +165,7 @@
 
       function updateCaption(){
         var $captionTarget = $('.caption_inner', $slideshowTarget);
-        var currentHeight = $captionTarget.height();
+        var currentHeight = $captionTarget.outerHeight(true);
         $captionTarget.css({'min-height': currentHeight + "px", 'max-height': currentHeight + "px"}); 
         $captionTarget.animate(
           { opacity: 0.0 }, 
