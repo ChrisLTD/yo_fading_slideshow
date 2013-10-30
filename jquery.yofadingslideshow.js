@@ -12,11 +12,13 @@
     var settings = $.extend( {
       'childObject'         : 'img',                // Target object
       'slideshowTarget'  : '#slideshow',     // Object to create the slideshow inside of
+      'autoAdvance'         : true,           // Should the slideshow auto advance
+      'delayBetweenSlides' : 1000,      // How much time in milliseconds between slides
       'includeNextPrevious'  : true,     // Display next and previous buttons
       'includePills'  : true,                   // Display pills navigation
+      'fadeSpeed'     : 'fase',                 // Value to pass to jQuery fade function
       'initCallback' : function() {},            // Called if plugin initialized on an object
-      'nextCallback' : function() {},           // Called after the next button is pressed
-      'previousCallback' : function() {}     // Called after the previous button is pressed
+      'slid' : function() {}           // Called after the image has changed
     }, options);
 
     // Plugin code
@@ -39,9 +41,6 @@
 
       // Hide data object
       $dataObject.hide();
-
-      // Set initial data
-      // $slideshowTarget.attr('data-current-slide', 0);      
 
       // Pull data from child objects
       $("> " + settings.childObject, this).each(function(index, value) {    
@@ -68,24 +67,69 @@
       }
 
       $slideshowTarget.prepend(
-        '<div class="slide" style="background-image: url(' + slideData[0] + ' );"></div>'
-        + '<div class="slide"></div>'
+        '<div class="slide"></div>'
+        + '<div class="slide" style="background-image: url(' + slideData[0] + ' );"></div>'
         + nextPrevious
         + pills
       );
 
+      // Bind actions to buttons
       $('.pill', $slideshowTarget).on('click', function(event) {
         event.preventDefault();
         $this = $(this);
         var slideNum = $this.data('slide-target'); 
-        var src = slideData[slideNum];
+        goToSlide( slideNum );
       });
+
+      $('.next', $slideshowTarget).on('click', function(event) {
+        event.preventDefault();
+        nextSlide();
+      });
+
+      $('.previous', $slideshowTarget).on('click', function(event) {
+        event.preventDefault();
+        previousSlide();
+      });
+
+      // Functions
+      function goToSlide( i ){
+        var $nextSlide = $('.slide', $slideshowTarget).first();
+        var $activeSlide = $('.slide', $slideshowTarget).last();
+        currentSlide = i;
+        $nextSlide.css('backgroundImage', 'url(' + slideData[ i ] + ')');
+        $activeSlide.fadeOut( settings.fadeSpeed, function(){
+          $activeSlide.prependTo( settings.slideshowTarget );
+          $activeSlide.show();
+        });
+        updateActivePill();
+        settings.slid();
+      }
+
+      function nextSlide(){
+        var nextSlide = currentSlide + 1;
+        if( nextSlide >= slideData.length ){
+          nextSlide = 0;
+        }
+        goToSlide( nextSlide );
+      }
+
+      function previousSlide(){
+        var previousSlide = currentSlide - 1;
+        if( currentSlide == 0 ){
+          previousSlide = slideData.length - 1;
+        }
+        goToSlide( previousSlide );
+      }
+
+      function updateActivePill(){  
+        $('.pill', $slideshowTarget).removeClass('active');
+        $('.pill:nth-child(' + (currentSlide + 1) + ')', $slideshowTarget).addClass('active');
+      }
 
       // Initialized
       settings.initCallback();
 
     });
-
 
   };
 })( jQuery );
