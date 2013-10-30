@@ -12,8 +12,8 @@
     var settings = $.extend( {
       'childObject'         : 'img',                // Target object
       'slideshowTarget'  : '#slideshow',     // Object to create the slideshow inside of
-      'autoAdvance'         : true,           // Should the slideshow auto advance
-      'delayBetweenSlides' : 1000,      // How much time in milliseconds between slides
+      'shouldAutoAdvance'         : true,           // Should the slideshow auto advance
+      'autoAdvanceDelay' : 3000,      // How much time in milliseconds between slides
       'includeNextPrevious'  : true,     // Display next and previous buttons
       'includePills'  : true,                   // Display pills navigation
       'fadeSpeed'     : 'fase',                 // Value to pass to jQuery fade function
@@ -91,8 +91,26 @@
         previousSlide();
       });
 
+      // Auto advance
+      function autoAdvance(){
+        nextSlide();
+      }
+
+      function startAutoAdvance(){
+        if( settings.shouldAutoAdvance ){
+          autoAdvanceTimer = setInterval( autoAdvance, settings.autoAdvanceDelay ); 
+        }  
+      }
+
+      function stopAutoAdvance(){
+        clearInterval( autoAdvanceTimer );
+      }
+
+      startAutoAdvance();
+
       // Functions
       function goToSlide( i ){
+        stopAutoAdvance();
         var $nextSlide = $('.slide', $slideshowTarget).first();
         var $activeSlide = $('.slide', $slideshowTarget).last();
         currentSlide = i;
@@ -102,6 +120,7 @@
           $activeSlide.show();
         });
         updateActivePill();
+        startAutoAdvance();
         settings.slid();
       }
 
