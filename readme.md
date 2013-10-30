@@ -9,19 +9,17 @@ Yo Faux Pagination will not activate if there is not more than one child object 
 ## Usage Examples
 Simple example
 ```html
-<div class="faux_paginate">
-  <div>
-    Page 1
-  </div>
-  <div>
-    Page 2
-  </div>
+<div id="slideshow"></div>
+
+<div class="slide_data" style="display: none;">
+  <div data-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNovzb5PwAGyALwB20G2QAAAABJRU5ErkJggg==">Caption 1</div>
+  <div data-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWPo6ur6DwAF3gKeHZlJ8QAAAABJRU5ErkJggg==">Caption 2</div>
 </div>
 
 <!-- Include JQuery Core above this line -->
-<script src="jquery.yofauxpagination.js"></script>
+<script src="jquery.yofadingslideshow.js"></script>
 <script>
-	$(".faux_paginate").YoFauxPagination();
+$(".slide_data").YoFadingSlideshow();
 </script>
 ```
 
@@ -52,17 +50,22 @@ Advanced example with callbacks
 
 ## Options
 ```js
-'childObject'	: 'div',            				// Target object
-'buttonType' : 'button',                  // Next and Previous button tag
-'prevText' : 'Previous',                  // Text for the previous button
-'nextText' : 'Next',                      // Text for the next button
-'initCallback' : function() {},           // Called if plugin initialized on an object
-'nextCallback' : function() {},           // Called after the next button is pressed
-'previousCallback' : function() {},     	// Called after the previous button is pressed
-'lastCallback' : function() {}            // Called when the user reaches the last "page"
+'childObject'         : 'div',        // Target object
+'slideshowTarget'  : '#slideshow',    // Object to create the slideshow inside of
+'shouldAutoAdvance': true,						// Should the slideshow auto advance
+'autoAdvanceDelay' : 3000,      			// How much time in milliseconds between slides
+'includeNextPrevious'  : true,     		// Display next and previous buttons
+'includePills'  : true,               // Display pills navigation
+'includeCaptions' : true,             // Display captions
+'fadeSpeed'     : 'fast',             // Value to pass to jQuery fade function
+'captionAnimationSpeed' : 200,   			// Value for caption animations
+'initCallback' : function() {},       // Called if plugin initialized on an object
+'beforeSlid' : function() {},         // Called before the image has changed
+'afterSlid' : function() {}           // Called after the image has changed
 ```
 
 ## Todo
 * Pause on hover
 * Disable nav buttons while moving between slides
 * Add options to disable fading animations so you could use CSS transitions
+* Add loading.gif to background of slideshow
