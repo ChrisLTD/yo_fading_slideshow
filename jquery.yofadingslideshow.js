@@ -12,6 +12,7 @@
     var settings = $.extend( {
       'childObject'         : 'img',                // Target object
       'slideshowTarget'  : '#slideshow',     // Object to create the slideshow inside of
+      'includeNextPrevious'  : next,     // Display next and previous buttons
       'initCallback' : function() {},            // Called if plugin initialized on an object
       'nextCallback' : function() {},           // Called after the next button is pressed
       'previousCallback' : function() {}     // Called after the previous button is pressed
@@ -22,6 +23,9 @@
 
       var $dataObject = $(this);
       var $slideshowTarget = $(settings.slideshowTarget);
+      var slideData = new Array();
+      var nextPrevious = '';
+      var pills = '';
 
       // Find and make sure there are child objects and a slideshow target before continuing
       var childTotal = $("> " + settings.childObject, this).length;
@@ -34,15 +38,22 @@
       // Hide data object
       $dataObject.hide();
 
-      // Modify child objects
+      // Pull data from child objects
       $("> " + settings.childObject, this).each(function(index, value) {    
         var $child = $(this);
-        // Number each slide
-        $child.attr("data-index", index);
+        slideData.push( $child.attr("src") );
       });
 
       // Create slideshow markup
-      $slideshowTarget.prepend('<h1>Slideshow</h1>');
+      if( settings.includeNextPrevious ){
+        nextPrevious = '<a href="#" class="previous">Previous</a>'
+                              +'<a href="#" class="next">Next</a>';
+      }
+
+      $slideshowTarget.prepend(
+        '<div class="slide" style="background-image: url(' + slideData[0] + ' );"></div>'
+        + nextPrevious
+      );
 
       // Initialized
       settings.initCallback();
