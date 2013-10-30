@@ -16,7 +16,9 @@
       'autoAdvanceDelay' : 3000,      // How much time in milliseconds between slides
       'includeNextPrevious'  : true,     // Display next and previous buttons
       'includePills'  : true,                   // Display pills navigation
-      'fadeSpeed'     : 'fase',                 // Value to pass to jQuery fade function
+      'includeCaptions' : true,             // Display captions
+      'fadeSpeed'     : 'fast',                 // Value to pass to jQuery fade function
+      'captionAnimationSpeed' : 200,   // Value for caption animations
       'initCallback' : function() {},            // Called if plugin initialized on an object
       'slid' : function() {}           // Called after the image has changed
     }, options);
@@ -29,6 +31,7 @@
       var slideData = new Array();
       var nextPrevious = '';
       var pills = '';
+      var caption = '';
       var currentSlide = 0;
 
       // Find and make sure there are child objects and a slideshow target before continuing
@@ -69,11 +72,20 @@
         pills += '</div>';
       }
 
+      if( settings.includePills ){
+        caption = '<div class="caption">'
+                    + '<div class="caption_inner">'
+                    + slideData[0]['caption']
+                    + '</div>'
+                    + '</div>';
+      }
+
       $slideshowTarget.prepend(
         '<div class="slide"></div>'
         + '<div class="slide" style="background-image: url(' + slideData[0]['src'] + ' );"></div>'
         + nextPrevious
         + pills
+        + caption
       );
 
       // Bind actions to buttons
@@ -123,6 +135,7 @@
           $activeSlide.show();
         });
         updateActivePill();
+        updateCaption();
         startAutoAdvance();
         settings.slid();
       }
@@ -146,6 +159,25 @@
       function updateActivePill(){  
         $('.pill', $slideshowTarget).removeClass('active');
         $('.pill:nth-child(' + (currentSlide + 1) + ')', $slideshowTarget).addClass('active');
+      }
+
+      function updateCaption(){
+        var $captionTarget = $('.caption_inner', $slideshowTarget);
+        var currentHeight = $captionTarget.height();
+        $captionTarget.css({'min-height': currentHeight + "px", 'max-height': currentHeight + "px"}); 
+        $captionTarget.animate(
+          { opacity: 0.0 }, 
+          settings.captionAnimationSpeed, 
+          function() {
+          $captionTarget.html( slideData[ currentSlide ]['caption'] );
+          } 
+        ).animate(
+          {"min-height": 0, "max-height" : "1000px" }, 
+          settings.captionAnimationSpeed 
+        ).animate(
+          { opacity: 1 }, 
+          settings.captionAnimationSpeed 
+        );
       }
 
       // Initialized
