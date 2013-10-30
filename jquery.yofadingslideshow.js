@@ -20,7 +20,8 @@
       'fadeSpeed'     : 'fast',                 // Value to pass to jQuery fade function
       'captionAnimationSpeed' : 200,   // Value for caption animations
       'initCallback' : function() {},            // Called if plugin initialized on an object
-      'slid' : function() {}           // Called after the image has changed
+      'beforeSlid' : function() {},           // Called before the image has changed
+      'afterSlid' : function() {}           // Called after the image has changed
     }, options);
 
     // Plugin code
@@ -125,6 +126,7 @@
 
       // Functions
       function goToSlide( i ){
+        settings.beforeSlid();
         stopAutoAdvance();
         var $nextSlide = $('.slide', $slideshowTarget).first();
         var $activeSlide = $('.slide', $slideshowTarget).last();
@@ -137,7 +139,7 @@
         updateActivePill();
         updateCaption();
         startAutoAdvance();
-        settings.slid();
+        settings.afterSlid();
       }
 
       function nextSlide(){
