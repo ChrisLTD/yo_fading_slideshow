@@ -61,3 +61,7 @@ Advanced example with callbacks
 'previousCallback' : function() {},     	// Called after the previous button is pressed
 'lastCallback' : function() {}            // Called when the user reaches the last "page"
 ```
+
+## Todo
+* Pause on hover
+* Disable nav buttons while moving between slides
