@@ -7,3 +7,11 @@
 #slideshow .next { right: 0; }
 
 #slideshow .previous { left: 0; }
+
+#slideshow .pills { position: absolute; top: 0; right: 0; }
+
+#slideshow .pill { display: inline-block; line-height: 10px; height: 10px; width: 10px; border-radius: 5px; background: blue; }
+
+#slideshow .pill.active { background: green; }
+
+#slideshow .pill + .pill { margin-left: 10px; }

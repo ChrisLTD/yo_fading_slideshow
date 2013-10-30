@@ -12,7 +12,8 @@
     var settings = $.extend( {
       'childObject'         : 'img',                // Target object
       'slideshowTarget'  : '#slideshow',     // Object to create the slideshow inside of
-      'includeNextPrevious'  : next,     // Display next and previous buttons
+      'includeNextPrevious'  : true,     // Display next and previous buttons
+      'includePills'  : true,                   // Display pills navigation
       'initCallback' : function() {},            // Called if plugin initialized on an object
       'nextCallback' : function() {},           // Called after the next button is pressed
       'previousCallback' : function() {}     // Called after the previous button is pressed
@@ -26,6 +27,7 @@
       var slideData = new Array();
       var nextPrevious = '';
       var pills = '';
+      var currentSlide = 0;
 
       // Find and make sure there are child objects and a slideshow target before continuing
       var childTotal = $("> " + settings.childObject, this).length;
@@ -37,6 +39,9 @@
 
       // Hide data object
       $dataObject.hide();
+
+      // Set initial data
+      // $slideshowTarget.attr('data-current-slide', 0);      
 
       // Pull data from child objects
       $("> " + settings.childObject, this).each(function(index, value) {    
@@ -50,10 +55,31 @@
                               +'<a href="#" class="next">Next</a>';
       }
 
+      if( settings.includePills ){
+        pills = '<div class="pills">';
+        for(var i = 0; i < slideData.length; i++){
+          pills += '<a href="#" data-slide-target="'+ i + '" class="pill';
+          if( i == 0){
+            pills+= ' active';
+          }
+          pills += '"></a>';
+        }
+        pills += '</div>';
+      }
+
       $slideshowTarget.prepend(
         '<div class="slide" style="background-image: url(' + slideData[0] + ' );"></div>'
+        + '<div class="slide"></div>'
         + nextPrevious
+        + pills
       );
+
+      $('.pill', $slideshowTarget).on('click', function(event) {
+        event.preventDefault();
+        $this = $(this);
+        var slideNum = $this.data('slide-target'); 
+        var src = slideData[slideNum];
+      });
 
       // Initialized
       settings.initCallback();
