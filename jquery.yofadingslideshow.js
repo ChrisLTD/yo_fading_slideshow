@@ -10,17 +10,17 @@
 
     // Create some defaults, extending them with any options that were provided
     var settings = $.extend( {
-      'childObject'         : 'div',                // Target object
-      'slideshowTarget'  : '#slideshow',     // Object to create the slideshow inside of
-      'shouldAutoAdvance'         : true,           // Should the slideshow auto advance
-      'autoAdvanceDelay' : 3000,      // How much time in milliseconds between slides
-      'includeNextPrevious'  : true,     // Display next and previous buttons
-      'includePills'  : true,                   // Display pills navigation
+      'childObject'         : 'div',        // Target object
+      'slideshowTarget'  : '#slideshow',    // Object to create the slideshow inside of
+      'shouldAutoAdvance': true,						// Should the slideshow auto advance
+      'autoAdvanceDelay' : 3000,      			// How much time in milliseconds between slides
+      'includeNextPrevious'  : true,     		// Display next and previous buttons
+      'includePills'  : true,               // Display pills navigation
       'includeCaptions' : true,             // Display captions
-      'fadeSpeed'     : 'fast',                 // Value to pass to jQuery fade function
-      'captionAnimationSpeed' : 200,   // Value for caption animations
-      'initCallback' : function() {},            // Called if plugin initialized on an object
-      'beforeSlid' : function() {},           // Called before the image has changed
+      'fadeSpeed'     : 'fast',             // Value to pass to jQuery fade function
+      'captionAnimationSpeed' : 200,   			// Value for caption animations
+      'initCallback' : function() {},       // Called if plugin initialized on an object
+      'beforeSlid' : function() {},         // Called before the image has changed
       'afterSlid' : function() {}           // Called after the image has changed
     }, options);
 
