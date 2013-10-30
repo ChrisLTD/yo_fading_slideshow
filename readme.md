@@ -65,3 +65,4 @@ Advanced example with callbacks
 ## Todo
 * Pause on hover
 * Disable nav buttons while moving between slides
+* Add options to disable fading animations so you could use CSS transitions
