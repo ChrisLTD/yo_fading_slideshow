@@ -2,7 +2,7 @@
 // http://chrisltd.com
 // Created October 2013
 // Version .01
-// Run this plugin on a div filled with images and it will create a fading slideshow inside a div with an id of 'slideshow'
+// Run this plugin on a div properly set with src data and captions and it will create a fading slideshow inside a div with an id of 'slideshow'
 
 (function( $ ){
 
@@ -10,7 +10,7 @@
 
     // Create some defaults, extending them with any options that were provided
     var settings = $.extend( {
-      'childObject'         : 'img',                // Target object
+      'childObject'         : 'div',                // Target object
       'slideshowTarget'  : '#slideshow',     // Object to create the slideshow inside of
       'shouldAutoAdvance'         : true,           // Should the slideshow auto advance
       'autoAdvanceDelay' : 3000,      // How much time in milliseconds between slides
@@ -45,7 +45,10 @@
       // Pull data from child objects
       $("> " + settings.childObject, this).each(function(index, value) {    
         var $child = $(this);
-        slideData.push( $child.attr("src") );
+        var imgData = new Array();
+        imgData['src'] = $child.data("src");  
+        imgData['caption'] = $child.html();  
+        slideData.push( imgData );
       });
 
       // Create slideshow markup
@@ -68,7 +71,7 @@
 
       $slideshowTarget.prepend(
         '<div class="slide"></div>'
-        + '<div class="slide" style="background-image: url(' + slideData[0] + ' );"></div>'
+        + '<div class="slide" style="background-image: url(' + slideData[0]['src'] + ' );"></div>'
         + nextPrevious
         + pills
       );
@@ -114,7 +117,7 @@
         var $nextSlide = $('.slide', $slideshowTarget).first();
         var $activeSlide = $('.slide', $slideshowTarget).last();
         currentSlide = i;
-        $nextSlide.css('backgroundImage', 'url(' + slideData[ i ] + ')');
+        $nextSlide.css('backgroundImage', 'url(' + slideData[ i ]['src'] + ')');
         $activeSlide.fadeOut( settings.fadeSpeed, function(){
           $activeSlide.prependTo( settings.slideshowTarget );
           $activeSlide.show();
