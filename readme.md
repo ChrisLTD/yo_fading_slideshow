@@ -1,6 +1,6 @@
 # Yo Fading Slideshow
 ### Version .01 | By [Chris Johnson](http://chrisltd.com) | https://github.com/ChrisLTD/yo_fading_slideshow
-Yo Fading Slideshow is a slideshow that uses just two elements on the page and swaps css background-images. It includes next and previous buttons and pill/dot navigation.
+Yo Fading Slideshow is a jQuery plugin that uses just two elements on the page and swaps css background-images. It includes next and previous buttons and pill/dot navigation.
 
 ![Animated Example](https://github.com/chrisltd/yo_fading_slideshow/raw/master/example.gif)
 
