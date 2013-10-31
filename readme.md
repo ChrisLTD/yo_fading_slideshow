@@ -1,10 +1,8 @@
 # Yo Fading Slideshow
-### Version .02 | By [Chris Johnson](http://chrisltd.com) | https://github.com/ChrisLTD/yo_fading_slideshow
-Yo Faux Pagination is a JQuery plugin that will let you page through a set of page elements by hiding and showing them in order. Just activate the plugin on a wrapper element and it will do the work.
+### Version .01 | By [Chris Johnson](http://chrisltd.com) | https://github.com/ChrisLTD/yo_fading_slideshow
+Yo Fading Slideshow is a slideshow that uses just two elements on the page and swaps css background-images. It includes next and previous buttons and pill/dot navigation.
 
-![Animated Example](https://github.com/chrisltd/yo_faux_pagination/raw/master/example.gif)
-
-Yo Faux Pagination will not activate if there is not more than one child object in the target wrapper.
+![Animated Example](https://github.com/chrisltd/yo_fading_slideshow/raw/master/example.gif)
 
 ## Usage Examples
 Simple example
@@ -69,3 +67,5 @@ Advanced example with callbacks
 * Disable nav buttons while moving between slides
 * Add options to disable fading animations so you could use CSS transitions
 * Add loading.gif to background of slideshow
+* Gracefully handle just one slide
+* Switch it so height and width are on the slide css, and then try it with padding-top/bottom to see if you can make the slideshow responsive
