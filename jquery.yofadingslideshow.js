@@ -1,7 +1,7 @@
 // By Chris Johnson
 // http://chrisltd.com
 // Created October 2013
-// Version .01
+// Version .03
 // Run this plugin on a div properly set with src data and captions and it will create a fading slideshow inside a div with an id of 'slideshow'
 
 (function( $ ){
@@ -12,13 +12,18 @@
     var settings = $.extend( {
       'childObject'         : 'div',        // Target object
       'slideshowTarget'  : '#slideshow',    // Object to create the slideshow inside of
-      'shouldAutoAdvance': true,						// Should the slideshow auto advance
-      'autoAdvanceDelay' : 3000,      			// How much time in milliseconds between slides
-      'includeNextPrevious'  : true,     		// Display next and previous buttons
+      'shouldAutoAdvance': true,            // Should the slideshow auto advance
+      'autoAdvanceDelay' : 3000,            // How much time in milliseconds between slides
+      'startAutoAdvanceDelay' : 3000,       // How much time in milliseconds before auto-advancing starts
+      'includeNextPrevious'  : true,        // Display next and previous buttons
       'includePills'  : true,               // Display pills navigation
       'includeCaptions' : true,             // Display captions
-      'fadeSpeed'     : 'fast',             // Value to pass to jQuery fade function
-      'captionAnimationSpeed' : 200,   			// Value for caption animations
+      'pauseOnHover' : false,               // Pause auto advance on hover
+      'fadeSpeed'     : 200,                // Speed of fade in miliseconds
+      'captionAnimationSpeed' : 200,        // Value for caption animations
+      'nextText' : 'Next',                  // Text inside of the next link
+      'previousText' : 'Previous',          // Text inside of the previous link
+      'preloadNextImage' : true,            // Preload possible next image into hidden div
       'initCallback' : function() {},       // Called if plugin initialized on an object
       'beforeSlid' : function() {},         // Called before the image has changed
       'afterSlid' : function() {}           // Called after the image has changed
@@ -34,6 +39,11 @@
       var pills = '';
       var caption = '';
       var currentSlide = 0;
+      var currentlyAnimating = false;
+      var delayBetweenSlideActions = settings.fadeSpeed + 100; // a little bit extra for safety
+      if( settings.includeCaptions ){
+        delayBetweenSlideActions += settings.captionAnimationSpeed;
+      }
 
       // Find and make sure there are child objects and a slideshow target before continuing
       var childTotal = $("> " + settings.childObject, this).length;
@@ -56,12 +66,12 @@
       });
 
       // Create slideshow markup
-      if( settings.includeNextPrevious ){
-        nextPrevious = '<a href="#" class="previous">Previous</a>'
-                              +'<a href="#" class="next">Next</a>';
+      if( settings.includeNextPrevious && childTotal > 1 ){
+        nextPrevious = '<a href="#" class="previous">' + settings.previousText +'</a>'
+                              +'<a href="#" class="next">' + settings.nextText +'</a>';
       }
 
-      if( settings.includePills ){
+      if( settings.includePills && childTotal > 1 ){
         pills = '<div class="pills">';
         for(var i = 0; i < slideData.length; i++){
           pills += '<a href="#" data-slide-target="'+ i + '" class="pill';
@@ -73,7 +83,7 @@
         pills += '</div>';
       }
 
-      if( settings.includePills ){
+      if( settings.includeCaptions){
         caption = '<div class="caption">'
                     + '<div class="caption_inner">'
                     + slideData[0]['caption']
@@ -82,12 +92,22 @@
       }
 
       $slideshowTarget.prepend(
-        '<div class="slide"></div>'
+        '<div class="preload_target" style="width: 0; height: 0; position: absolute;"></div>' 
+        + '<div class="slide"></div>' // bottom slide (initially obscured)
         + '<div class="slide" style="background-image: url(' + slideData[0]['src'] + ' );"></div>'
         + nextPrevious
         + pills
         + caption
       );
+
+      // If there is only one slide, let's stop here
+      if( childTotal == 1 ){
+        console.log("Only one slide detected.");
+        settings.initCallback();
+        return;
+      }
+
+      preloadNextSlide();
 
       // Bind actions to buttons
       $('.pill', $slideshowTarget).on('click', function(event) {
@@ -107,6 +127,16 @@
         previousSlide();
       });
 
+      if( settings.pauseOnHover ){
+        $slideshowTarget
+          .mouseover(function() {
+            stopAutoAdvance();
+          })
+          .mouseout(function() {
+            startAutoAdvance();
+          });
+      }
+
       // Auto advance
       function autoAdvance(){
         nextSlide();
@@ -119,15 +149,26 @@
       }
 
       function stopAutoAdvance(){
-        clearInterval( autoAdvanceTimer );
+        if( typeof autoAdvanceTimer !== "undefined" ){ 
+          clearInterval( autoAdvanceTimer );
+        }
+        if( typeof initialAutoAdvanceTimer !== "undefined" ){ 
+          clearTimeout( initialAutoAdvanceTimer );
+        }
       }
 
-      startAutoAdvance();
+      // Start autoadvance after a delay
+      var initialAutoAdvanceTimer = window.setTimeout( startAutoAdvance, settings.startAutoAdvanceDelay );
 
       // Functions
       function goToSlide( i ){
+        if( currentlyAnimating ){
+          console.log( 'stop bothering me' );
+          return;
+        }
+        currentlyAnimating = true;
         settings.beforeSlid();
-        stopAutoAdvance();
+        stopAutoAdvance(); // stop auto advancing temporarily
         var $nextSlide = $('.slide', $slideshowTarget).first();
         var $activeSlide = $('.slide', $slideshowTarget).last();
         currentSlide = i;
@@ -135,6 +176,9 @@
         $activeSlide.fadeOut( settings.fadeSpeed, function(){
           $activeSlide.prependTo( settings.slideshowTarget );
           $activeSlide.show();
+          preloadNextSlide();
+          // don't let the next slide start going until a little bit after this one is done.
+          window.setTimeout( function(){ currentlyAnimating = false; }, delayBetweenSlideActions );
         });
         updateActivePill();
         updateCaption();
@@ -142,20 +186,36 @@
         settings.afterSlid();
       }
 
-      function nextSlide(){
+      function preloadNextSlide(){
+        if( !settings.preloadNextImage ){
+          return;
+        }
+        var $preloadTarget = $('.preload_target', $slideshowTarget);
+        $preloadTarget.css('backgroundImage', 'url(' + slideData[ getNextSlideIndex() ]['src'] + ')');
+      }
+
+      function getNextSlideIndex(){
         var nextSlide = currentSlide + 1;
         if( nextSlide >= slideData.length ){
           nextSlide = 0;
         }
-        goToSlide( nextSlide );
+        return nextSlide;
       }
 
-      function previousSlide(){
+      function getPreviousSlideIndex(){
         var previousSlide = currentSlide - 1;
         if( currentSlide == 0 ){
           previousSlide = slideData.length - 1;
         }
-        goToSlide( previousSlide );
+        return previousSlide;
+      }
+
+      function nextSlide(){
+        goToSlide( getNextSlideIndex() );
+      }
+
+      function previousSlide(){
+        goToSlide( getPreviousSlideIndex() );
       }
 
       function updateActivePill(){  
