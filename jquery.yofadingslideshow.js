@@ -10,23 +10,23 @@
 
     // Create some defaults, extending them with any options that were provided
     var settings = $.extend( {
-      'childObject'         : 'div',        // Target object
-      'slideshowTarget'  : '#slideshow',    // Object to create the slideshow inside of
-      'shouldAutoAdvance': true,            // Should the slideshow auto advance
-      'autoAdvanceDelay' : 3000,            // How much time in milliseconds between slides
-      'startAutoAdvanceDelay' : 3000,       // How much time in milliseconds before auto-advancing starts
-      'includeNextPrevious'  : true,        // Display next and previous buttons
-      'includePills'  : true,               // Display pills navigation
-      'includeCaptions' : true,             // Display captions
-      'pauseOnHover' : false,               // Pause auto advance on hover
-      'fadeSpeed'     : 200,                // Speed of fade in miliseconds
-      'captionAnimationSpeed' : 200,        // Value for caption animations
-      'nextText' : 'Next',                  // Text inside of the next link
-      'previousText' : 'Previous',          // Text inside of the previous link
-      'preloadNextImage' : true,            // Preload possible next image into hidden div
-      'initCallback' : function() {},       // Called if plugin initialized on an object
-      'beforeSlid' : function() {},         // Called before the image has changed
-      'afterSlid' : function() {}           // Called after the image has changed
+      'childObject'             : 'div',          // Target object
+      'slideshowTarget'         : '#slideshow',   // Object to create the slideshow inside of
+      'shouldAutoAdvance'       : true,           // Should the slideshow auto advance
+      'autoAdvanceDelay'        : 3000,           // How much time in milliseconds between slides
+      'startAutoAdvanceDelay'   : 3000,           // How much time in milliseconds before auto-advancing starts
+      'includeNextPrevious'     : true,           // Display next and previous buttons
+      'includePills'            : true,           // Display pills navigation
+      'includeCaptions'         : true,           // Display captions
+      'pauseOnHover'            : false,          // Pause auto advance on hover
+      'fadeSpeed'               : 200,            // Speed of fade in miliseconds
+      'captionAnimationSpeed'   : 200,            // Value for caption animations
+      'nextText'                : 'Next',         // Text inside of the next link
+      'previousText'            : 'Previous',     // Text inside of the previous link
+      'preloadNextImage'        : true,           // Preload possible next image into hidden div
+      'initCallback'            : function() {},  // Called if plugin initialized on an object
+      'beforeSlid'              : function() {},  // Called before the image has changed
+      'afterSlid'               : function() {}   // Called after the image has changed
     }, options);
 
     // Plugin code
