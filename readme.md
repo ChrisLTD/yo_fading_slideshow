@@ -37,6 +37,7 @@ $(".slide_data").YoFadingSlideshow();
 'nextText'                : 'Next',         // Text inside of the next link
 'previousText'            : 'Previous',     // Text inside of the previous link
 'preloadNextImage'        : true,           // Preload possible next image into hidden div
+'touchEnabled'            : false,          // enabled the ability to swipe back and forth for navigation, jQuery mobile required
 'initCallback'            : function() {},  // Called if plugin initialized on an object
 'beforeSlid'              : function() {},  // Called before the image has changed
 'afterSlid'               : function() {}   // Called after the image has changed
@@ -44,4 +45,3 @@ $(".slide_data").YoFadingSlideshow();
 
 ## Todo
 * Add ability to randomize slides
-* Add swipe events
