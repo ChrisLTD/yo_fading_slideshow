@@ -45,3 +45,4 @@ $(".slide_data").YoFadingSlideshow();
 
 ## Todo
 * Add ability to randomize slides
+* Add option to disable the functionality that makes the user wait for the animation to finish before they can start another one
