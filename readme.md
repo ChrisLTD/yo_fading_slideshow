@@ -41,3 +41,7 @@ $(".slide_data").YoFadingSlideshow();
 'beforeSlid'              : function() {},  // Called before the image has changed
 'afterSlid'               : function() {}   // Called after the image has changed
 ```
+
+## Todo
+* Add ability to randomize slides
+* Add swipe events
