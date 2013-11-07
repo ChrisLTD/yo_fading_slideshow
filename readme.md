@@ -38,11 +38,11 @@ $(".slide_data").YoFadingSlideshow();
 'previousText'            : 'Previous',     // Text inside of the previous link
 'preloadNextImage'        : true,           // Preload possible next image into hidden div
 'touchEnabled'            : false,          // enabled the ability to swipe back and forth for navigation, jQuery mobile required
+'randomizeSlides'         : false,          // randomize the order of the slides
 'initCallback'            : function() {},  // Called if plugin initialized on an object
 'beforeSlid'              : function() {},  // Called before the image has changed
 'afterSlid'               : function() {}   // Called after the image has changed
 ```
 
 ## Todo
-* Add ability to randomize slides
 * Add option to disable the functionality that makes the user wait for the animation to finish before they can start another one

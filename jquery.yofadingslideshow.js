@@ -25,6 +25,7 @@
       'previousText'            : 'Previous',     // Text inside of the previous link
       'preloadNextImage'        : true,           // Preload possible next image into hidden div
       'touchEnabled'            : false,          // enabled the ability to swipe back and forth for navigation, jQuery mobile required
+      'randomizeSlides'         : false,          // randomize the order of the slides
       'initCallback'            : function() {},  // Called if plugin initialized on an object
       'beforeSlid'              : function() {},  // Called before the image has changed
       'afterSlid'               : function() {}   // Called after the image has changed
@@ -65,6 +66,13 @@
         imgData['caption'] = $child.html();  
         slideData.push( imgData );
       });
+
+      // Randomize slide order
+      if( settings.randomizeSlides ){
+        slideData.sort(function(){
+          return .5 - Math.random();
+        }); 
+      }
 
       // Create slideshow markup
       if( settings.includeNextPrevious && childTotal > 1 ){
