@@ -42,6 +42,8 @@
       var caption = '';
       var currentSlide = 0;
       var currentlyAnimating = false;
+      var autoAdvanceTimer = null;
+      var initialAutoAdvanceTimer = null;
       var delayBetweenSlideActions = settings.fadeSpeed + 100; // a little bit extra for safety
       if( settings.includeCaptions ){
         delayBetweenSlideActions += settings.captionAnimationSpeed;
